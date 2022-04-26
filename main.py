@@ -72,21 +72,31 @@ def transaction():
 def main():  # loop is working only for order 0 > 1 > 2
     op = int(
         input("Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+    while 1:
+        if op == 0:  # switch case can be used
+            intro0()
+            op = int(
+                input(
+                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
 
-    if op == 0:  # switch case can be used
-        intro0()
-        main()
-    elif op == 1:
-        instUnif()
-        main()
-    elif op == 2:
-        balance()
-        transaction()
-        main()
-        print("Master list", master)
-    else:
-        print("Wrong Input")
-        main()
+        elif op == 1:
+            instUnif()
+            op = int(
+                input(
+                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
 
+        elif op == 2:
+            balance()
+            transaction()
+            print("Master list", master)
+            op = int(
+                input(
+                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+
+        else:
+            print("Wrong Input")
+            op = int(
+                input(
+                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
 
 main()
