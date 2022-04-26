@@ -76,7 +76,7 @@ def transaction():
         print(instSheet)
 
 
-def main():  # loop is working only for order 0 > 1 > 2
+def main():  # not sure if this is still true: loop is working only for order 0 -> 1 -> 2
     op = int(
         input("Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
     while 1:
