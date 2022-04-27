@@ -32,7 +32,7 @@ expSheet: dict[Any, Any] = {}
 def intro():
     name = input("Enter member name: ")
     memExp: dict[Any, Any] = {}
-    #master[name] = 0
+    # master[name] = 0
     instSheet[name] = 0
     expSheet[name] = memExp
 
@@ -44,72 +44,76 @@ def intro0():
 
 
 def instNonUnif():
-    print(instSheet.keys())
     expense = input("Name of expense: ")
+    print(instSheet.keys())
     payee = input("Who is paying? ")
     subs = input("Subscribers (seperated by comma): ")
     subsList = subs.split(",")
     payeeVal = float(input("Payment value: "))
-    #master[payee] -= payeeVal
+    # master[payee] -= payeeVal
     instVal = payeeVal / len(subsList)
+    instVal = round(instVal, 2)
     for i in instSheet:
         if i in subsList:
             instSheet[i] += instVal
             expSheet[i][expense] = instVal
     instSheet[payee] -= payeeVal
-    print("\nTotal expense value: ", instVal, "\nExpense per member(who has subscribed): ", payeeVal, "\nBalance sheet: ", instSheet)
+    print("\nTotal expense value: ", payeeVal, "\nExpense per member(who has subscribed): ", instVal,
+          "\nBalance sheet: ", instSheet)
 
 
 def transaction():
-    while not all(value == 0 for value in instSheet.values()):
-        print("Balance Sheet:", instSheet)
+    while not all(-0.01 < value < 0.01 for value in instSheet.values()):
+        #print("Balance Sheet:", instSheet)
         if max(instSheet.values()) <= abs(min(instSheet.values())):
             a = max(instSheet, key=instSheet.get)
             b = min(instSheet, key=instSheet.get)
-            av = instSheet[a]
-            bv = instSheet[b]
-            print("\n***", a, "gives ", abs(av), " to", b, "***\n")
+            av = round(instSheet[a], 2)
+            bv = round(instSheet[b], 2)
+            print("\n***", a, "gives", abs(av), "to", b, "***\n")
         else:
             b = max(instSheet, key=instSheet.get)
             a = min(instSheet, key=instSheet.get)
-            av = instSheet[a]
-            bv = instSheet[b]
-            print("\n***", b, "gives ", abs(av), " to", a, "***\n")
+            av = round(instSheet[a], 2)
+            bv = round(instSheet[b], 2)
+            print("\n***", b, "gives", abs(av), "to", a, "***\n")
 
         instSheet[b] = bv + av
         instSheet[a] = 0
-        print(instSheet)
-        print(expSheet)
+    print(instSheet)
+    print("\n***\n\nExpenditure per member:")
+    [print(key, ':', value) for key, value in expSheet.items()]
+    print("\n***\n")
 
 
 def main():  # not sure if this is still true: loop is working only for order 0 -> 1 -> 2
-    op = int(
-        input("Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+    op = (
+        input("Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
     while 1:
-        if op == 0:  # switch case can be used
+        if op == '0':  # switch case can be used
             intro0()
-            op = int(
+            op = (
                 input(
-                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+                    "\n-----\nOptions:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
 
-        elif op == 1:
+        elif op == '1':
             instNonUnif()
-            op = int(
+            op = (
                 input(
-                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+                    "\n-----\nOptions:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
 
-        elif op == 2:
-            #balance()
+        elif op == '2':
+            # balance()
             transaction()
-            op = int(
+            op = (
                 input(
-                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+                    "\n-----\nOptions:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
 
         else:
             print("Wrong Input")
-            op = int(
+            op = (
                 input(
-                    "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
+                    "\n-----\nOptions:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
 
 
 main()
