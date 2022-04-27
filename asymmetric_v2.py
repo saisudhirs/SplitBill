@@ -26,12 +26,15 @@ import math
 master: dict[Any, Any] = {}
 balSheet: dict[Any, Any] = {}
 instSheet: dict[Any, Any] = {}
+expSheet: dict[Any, Any] = {}
 
 
 def intro():
     name = input("Enter member name: ")
+    memExp: dict[Any, Any] = {}
     #master[name] = 0
     instSheet[name] = 0
+    expSheet[name] = memExp
 
 
 def intro0():
@@ -42,6 +45,7 @@ def intro0():
 
 def instNonUnif():
     print(instSheet.keys())
+    expense = input("Name of expense: ")
     payee = input("Who is paying? ")
     subs = input("Subscribers (seperated by comma): ")
     subsList = subs.split(",")
@@ -51,8 +55,9 @@ def instNonUnif():
     for i in instSheet:
         if i in subsList:
             instSheet[i] += instVal
+            expSheet[i][expense] = instVal
     instSheet[payee] -= payeeVal
-    print(instVal, payeeVal, instSheet)
+    print("\nTotal expense value: ", instVal, "\nExpense per member(who has subscribed): ", payeeVal, "\nBalance sheet: ", instSheet)
 
 
 def transaction():
@@ -74,6 +79,7 @@ def transaction():
         instSheet[b] = bv + av
         instSheet[a] = 0
         print(instSheet)
+        print(expSheet)
 
 
 def main():  # not sure if this is still true: loop is working only for order 0 -> 1 -> 2
@@ -95,7 +101,6 @@ def main():  # not sure if this is still true: loop is working only for order 0 
         elif op == 2:
             #balance()
             transaction()
-            print("Master list", instSheet)
             op = int(
                 input(
                     "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\nInput: "))
