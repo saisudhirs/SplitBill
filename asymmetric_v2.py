@@ -26,7 +26,7 @@ import math
 master: dict[Any, Any] = {}
 balSheet: dict[Any, Any] = {}
 instSheet: dict[Any, Any] = {}
-expSheet: dict[Any, Any] = {}
+expSheet: dict[Any, Any] = {"All expenses": {}}
 
 
 def intro():
@@ -35,6 +35,7 @@ def intro():
     # master[name] = 0
     instSheet[name] = 0
     expSheet[name] = memExp
+    expSheet[name]["TOTAL"] = 0
 
 
 def intro0():
@@ -47,35 +48,49 @@ def instNonUnif():
     expense = input("Name of expense: ")
     print(instSheet.keys())
     payee = input("Who is paying? ")
-    subs = input("Subscribers (seperated by comma): ")
-    subsList = subs.split(",")
+    subs = input("Subscribers (seperated by just comma): (* for all) ")
+    if subs == '*':
+        subsList = list(instSheet.keys())
+    else:
+        subsList = subs.split(",")
     payeeVal = float(input("Payment value: "))
     # master[payee] -= payeeVal
     instVal = payeeVal / len(subsList)
-    instVal = round(instVal, 2)
+    instVal = round(instVal, 5)
     for i in instSheet:
         if i in subsList:
             instSheet[i] += instVal
             expSheet[i][expense] = instVal
+            expSheet[i]["TOTAL"] += instVal  # totalling should be optimised
+    expSheet["All expenses"]["GRAND TOTAL"] += payeeVal
+    expSheet["All expenses"][expense] = payeeVal
     instSheet[payee] -= payeeVal
     print("\nTotal expense value: ", payeeVal, "\nExpense per member(who has subscribed): ", instVal,
           "\nBalance sheet: ", instSheet)
 
 
 def transaction():
-    while not all(-0.01 < value < 0.01 for value in instSheet.values()):
-        #print("Balance Sheet:", instSheet)
+    expLen = len(expSheet["All expenses"])
+    print(expLen)
+    tolerance = 0.01
+    est = 5
+    if 10000 > expLen > 100:
+        tolerance *= 100
+        est += 2
+
+    while not all(-tolerance < value < tolerance for value in instSheet.values()):
+        # print("Balance Sheet:", instSheet)
         if max(instSheet.values()) <= abs(min(instSheet.values())):
             a = max(instSheet, key=instSheet.get)
             b = min(instSheet, key=instSheet.get)
-            av = round(instSheet[a], 2)
-            bv = round(instSheet[b], 2)
+            av = round(instSheet[a], est)
+            bv = round(instSheet[b], est)
             print("\n***", a, "gives", abs(av), "to", b, "***\n")
         else:
             b = max(instSheet, key=instSheet.get)
             a = min(instSheet, key=instSheet.get)
-            av = round(instSheet[a], 2)
-            bv = round(instSheet[b], 2)
+            av = round(instSheet[a], est)
+            bv = round(instSheet[b], est)
             print("\n***", b, "gives", abs(av), "to", a, "***\n")
 
         instSheet[b] = bv + av
@@ -88,7 +103,8 @@ def transaction():
 
 def main():  # not sure if this is still true: loop is working only for order 0 -> 1 -> 2
     op = (
-        input("Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
+        input(
+            "Options:\n0 for initializing members\n1 for new expense\n2 for showing balance transactions\n-----\nInput: "))
     while 1:
         if op == '0':  # switch case can be used
             intro0()
